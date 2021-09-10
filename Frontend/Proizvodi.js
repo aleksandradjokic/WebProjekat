@@ -2,6 +2,7 @@ import { Proizvod } from "./Proizvod.js"
 var i = 0; var br = 0;
 export class Proizvodi {
     constructor(maxProizvoda, brojProizvoda, tip, marka) {
+   
         this.maxProizvoda = maxProizvoda;
         this.brojProizvoda = brojProizvoda;
         this.tip = tip;
@@ -24,105 +25,102 @@ export class Proizvodi {
         host1.appendChild(kont);
 
         this.miniKontejner.onclick = (ev) => {
-            console.log(i);
-            /*console.log(this.listaNaziva.length); 
-            console.log(br);
-            if(this.listaNaziva.length==0)
-             {
-                 i=1;
-                 
-             }
-             if(  i!=0){
-                     host1.innerHTML="";
-                   // this.listaNaziva.length==0 ||
-                     i--;
-             }
-             if(br>0)
-             {
-                 host1.innerHTML="";
-                 br=0;
-             }*/
-            if (i > 0) {
-                ;
-                while (i > 0) {
 
-                    if (document.getElementById(i)!=null) {
+/* if(kont!=null)
+{
+    kont.innerHTML="";
+}
+
+this.listaNaziva.forEach((naziv) => {
+   // i++;
+
+    naziv.crtajNaziv(kont, i);
+
+})
+           fetch("https://localhost:5001/Magacin/PreuzmiProizvod").then(p => {
+          p.json().then(data => {
+            data.forEach(proiz => {
+                if(proiz.tip==this.tip && proiz.marka==this.marka&& proiz.naziv==t)
+                console.log(proiz);
+                    //proiz.crtajNaziv(kont, i);
+                    proiz.listaNaziva.forEach((n) => {
+                       // i++;
+        
+                        //n.crtajNaziv(kont, i);
+        
+                    })
+            });
+        });
+    });*/
+            if (i > 0) {
+
+                while (i > 0) {
+console.log(i);
+                    if (document.getElementById(i)) {
                         var el = document.getElementById(i);
 
                         document.getElementById(i).remove();
                         i--;
-                        // el.remove();
-                    }
 
+                    }
+                    else{
+                        i=0;
                     }
 
                 }
 
-
-                this.listaNaziva.forEach((naziv) => {
-                    i++;
-                    //br++;
-                    naziv.crtajNaziv(kont, i);
-
-                })
-
             }
-        }
 
-        dodajProizvod(pr) {
-            this.listaNaziva.push(pr);
-        }
-        proveraNaziva(noviNaziv) {
-            let pom = false;
+
             this.listaNaziva.forEach((naziv) => {
-                if (noviNaziv.naziv == naziv.naziv) {
-                    pom = true;
-                }
-            });
-            return pom;
-        }
-        pronadjiNaz(naz){
-            /*this.listaNaziva.forEach(naziv=>{
-                if(naziv.naziv==naz)
-                 {
-                    console.log(naziv.naziv);
-                    return naziv.naziv;
-                    }
-                 else{
-                     return false;
-                 }
-              });*/
-            let n = this.listaNaziva.find(nazivv => nazivv.naziv == naz);
+                i++;
 
-            return n;
+                naziv.crtajNaziv(kont, i);
+
+            })
+
         }
-        upisiProizvod(pr){
-            if (this.brojProizvoda < this.maxProizvoda) {
-                /*console.log(pr);
-                fetch("https://localhost:5001/Magacin/UpisJednogProizvoda/" + pr.tip+ pr.marka, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        naziv: pr.naziv,
-                        tip: pr.tip
-                    })
-                })*/
+    }
+
+    dodajProizvod(pr) {
+        this.listaNaziva.push(pr);
+    }
+    proveraNaziva(noviNaziv) {
+        let pom = false;
+        this.listaNaziva.forEach((naziv) => {
+            if (noviNaziv.naziv == naziv.naziv) {
+                pom = true;
             }
-            else {
-                alert("Kapacitet je pun!");
-            }
+        });
+        return pom;
+    }
+    pronadjiN(naz) {
 
+        let n = this.listaNaziva.find(nazivv => nazivv.naziv == naz);
+
+        return n;
+    }
+    upisiProizvod(pr) {
+        if (this.brojProizvoda < this.maxProizvoda) {
 
         }
-        obrisiProizvod(pr){
-            console.log(pr);
-            this.listaNaziva.pop(pr);
-            console.log(this.listaNaziva);
-            this.brojProizvoda--;
-            i = 0;
-
+        else {
+            alert("Kapacitet je pun!");
         }
+
 
     }
+    obrisiProizvod(pr) {
+        const index = this.listaNaziva.indexOf(pr);
+        if (index > -1) {
+            this.listaNaziva.splice(index, 1);
+            this.brojProizvoda--;
+          }
+        //this.listaNaziva.pop(pr);
+
+        //this.brojProizvoda--;
+        //i = 0;
+
+    }
+
+}

@@ -68,7 +68,7 @@ export class Magacin {
       pomocna.id = this.naziv + p;
     }
     this.rafovi.forEach((r) => {
-      console.log(p1)
+
       if (i == 6) {
         p1++;
         i = 0;
@@ -78,6 +78,9 @@ export class Magacin {
 
       var pLabela = document.createElement("label");
       pLabela.innerHTML = r.marka;
+      document.getElementById(this.naziv + p1).appendChild(pLabela);
+      var pLabela = document.createElement("label");
+      pLabela.innerHTML = " " +r.trenutnoPr+"/"+r.max;
       document.getElementById(this.naziv + p1).appendChild(pLabela);
 
       r.crtajRaf(document.getElementById(this.naziv + p1), r.marka, pom);
@@ -117,28 +120,35 @@ export class Magacin {
     pLabela.innerHTML = "Unesite podatke proizvoda koji dodajete";
     kont2.appendChild(pLabela);
 
-    /* this.crtajDetalje(kont2, "Dodaj proizvod");
- 
-     var pLabela = document.createElement("h3");
-     pLabela.innerHTML = "Unesite podatke proizvoda koji brisete ";
-     kont2.appendChild(pLabela);
- 
-     this.crtajDetalje(kont2, "Obrisi proizvod");*/
+
     var pLabela = document.createElement("label");
     pLabela.innerHTML = "Naziv proizvoda";
     kont2.appendChild(pLabela);
 
     pLabela = document.createElement("input");
-    pLabela.className = "nazivProizvoda";
+    pLabela.className = "nazivProizvoda"
     kont2.appendChild(pLabela);
 
     pLabela = document.createElement("label");
     pLabela.innerHTML = "Tip uredjaja:";
     kont2.appendChild(pLabela);
 
-    pLabela = document.createElement("input");
-    pLabela.className = "tipUredjaja";
-    kont2.appendChild(pLabela);
+    let op = null;
+    let sel = document.createElement("select");
+    sel.className = "sel";
+    this.rafovi.forEach(raf => {
+      raf.tipovi.forEach(tip => {
+        op = document.createElement("option");
+        op.innerHTML = tip.tip;
+        op.value = tip.tip;
+        sel.appendChild(op);
+      })
+
+    })
+    kont2.appendChild(sel);
+    //pLabela = document.createElement("input");
+    //pLabela.className = "tipUredjaja";
+    //kont2.appendChild(pLabela);
 
     pLabela = document.createElement("label");
     pLabela.innerHTML = "Marka proizvoda:";
@@ -149,7 +159,7 @@ export class Magacin {
     this.rafovi.forEach((raf) => {
       marke.push(raf.marka);
     });
-    //["samsung", "bosh", "LG", "philips"];
+
 
     let opcija = null;
     let labela = null;
@@ -181,10 +191,22 @@ export class Magacin {
     pLabela.innerHTML = "Marka uredjaja";
     kont3.appendChild(pLabela);
 
-    pLabela = document.createElement("input");
-    pLabela.className = "markaUredjajaTip";
-    kont3.appendChild(pLabela);
+    //pLabela = document.createElement("input");
+    //pLabela.className = "markaUredjajaTip";
+    //kont3.appendChild(pLabela);
+    let op1 = null;
+    let sel1 = document.createElement("select");
+    sel1.className = "markaUredjajaTip";
+    this.rafovi.forEach(raf => {
 
+        op1 = document.createElement("option");
+        op1.innerHTML = raf.marka;
+        op1.value = raf.marka;
+        sel1.appendChild(op1);
+
+
+    })
+    kont3.appendChild(sel1);
     pLabela = document.createElement("label");
     pLabela.innerHTML = "Tip uredjaja:";
     kont3.appendChild(pLabela);
@@ -271,7 +293,7 @@ export class Magacin {
     this.rafovi.forEach((raf) => {
       marke.push(raf.marka);
     });
-    //["samsung", "bosh", "LG", "philips"];
+
 
     let opcija = null;
     let labela = null;
@@ -292,7 +314,7 @@ export class Magacin {
     })
 
 
-    //this.dodajDugme(host, text);
+
 
 
   }
@@ -306,7 +328,7 @@ export class Magacin {
       const marka = this.Megakontejner.querySelector(".markaUredjajaM").value;
       const br = parseInt(this.Megakontejner.querySelector(".maxPrM").value);
 
-      console.log(text);
+
 
 
       if (text == "Dodaj marku") {
@@ -345,9 +367,10 @@ export class Magacin {
               })
             }).then(p => {
               if (p.ok) {
-                console.log("Succesful");
-                alert("Uspesno dodavanje osvezite stranicu");
+
+
                 this.rafovi.push(r);
+                this.trenutno++;
                 this.Megakontejner.innerHTML = "";
                 this.crtajMagacin(document.body);
               }
@@ -391,14 +414,19 @@ export class Magacin {
               var p = this.naziv + marka;
               var pom;
               var s;
+              var i = 0;
+
               this.rafovi.forEach((raf) => {
                 if (raf.marka == marka) {
                   s = raf;
+                  i++;
 
                 }
 
-              });
-              console.log(s);
+
+              }); const index = this.rafovi.indexOf(s);
+              
+
               fetch("https://localhost:5001/Magacin/IzbrisiMarku/" + p, {
                 method: "DELETE",
                 headers: {
@@ -406,9 +434,12 @@ export class Magacin {
                 }
               }).then(p => {
                 if (p.ok) {
-                  console.log("Succesful");
-                  alert("Uspesno brisanje osvezite stranicu");
-                  this.rafovi.pop(s);
+
+                  
+                  if (index > -1) {
+                    this.rafovi.splice(index, 1);
+                    this.trenutno--;
+                  }
                   this.Megakontejner.innerHTML = "";
                   this.crtajMagacin(document.body);
                 }
@@ -452,9 +483,9 @@ export class Magacin {
         }
         this.rafovi.forEach((raf) => {
           if (raf.marka == marka) {
-            console.log(raf.pronadjiTip(tip));
+
             pom = raf.pronadjiTip(tip);
-            console.log(pom);
+
           }
         });
         if (pom) {
@@ -471,7 +502,7 @@ export class Magacin {
           else {
             var l = new Proizvodi(max, 0, tip, marka);
             var p = this.naziv + marka + tip;
-var sa;
+            var sa;
             this.rafovi.forEach((raf) => {
               if (raf.marka == marka) {
                 sa = raf;
@@ -492,16 +523,15 @@ var sa;
               })
             }).then(p => {
               if (p.ok) {
-                console.log("Succesful");
-                alert("Uspesno dodavanje osvezite stranicu");
+
                 sa.dodajTip(l);
                 sa.trenutnoPr++;
-                console.log(sa);
+
                 this.Megakontejner.innerHTML = "";
                 this.crtajMagacin(document.body);
               }
               else if (p.status == 406) {
-               alert("Kapacitet magacina je ispunjen.");
+                alert("Kapacitet magacina je ispunjen.");
 
               }
             }).catch(p => {
@@ -553,7 +583,7 @@ var sa;
                   }
                 });
 
-                console.log(s);
+
                 fetch("https://localhost:5001/Magacin/IzbrisiTip/" + t, {
                   method: "DELETE",
                   headers: {
@@ -561,8 +591,8 @@ var sa;
                   }
                 }).then(p => {
                   if (p.ok) {
-                    console.log("Succesful");
-                    alert("Uspesno brisanje osvezite stranicu");
+                    
+
                     this.obrisiProizvodi(s);
                     this.Megakontejner.innerHTML = "";
                     this.crtajMagacin(document.body);
@@ -588,7 +618,9 @@ var sa;
     host.appendChild(dugme);
     dugme.onclick = (ev) => {
       const naziv = this.Megakontejner.querySelector(".nazivProizvoda").value;
-      const tip = this.Megakontejner.querySelector(".tipUredjaja").value;
+      const tip = this.Megakontejner.querySelector(".sel").value;
+    
+      // const tip = this.Megakontejner.querySelector(".tipUredjaja").value;
       const markaa = this.Megakontejner.querySelector(`input[name='${"radioMarke"}']:checked`);
       if (markaa == null) {
         alert("Molimo Vas odaberite marku proizvoda");
@@ -605,10 +637,11 @@ var sa;
       const marka = markaa.value;
       let pom;
       if (text == "Dodaj proizvod") {
-        //if (this.pronadjiRaf(marka, tip, naziv)) {
+
         this.rafovi.forEach((raf) => {
           if (raf.marka == marka) {
             pom = raf.pronadjiProizvode(tip, naziv);
+
           }
         });
         if (pom) {
@@ -617,23 +650,26 @@ var sa;
         else {
           let pom1;
           this.rafovi.forEach((raf) => {
-            pom1 = raf.pronadjiTip(tip);
+            if (raf.marka == marka) {
+              pom1 = raf.pronadjiTip(tip);
+              
+            }
 
           });
-          if (!pom1) {
+          if (pom1 == null) {
             alert("Ovaj tip ne postoji u magacinu prvo dodajte tip. ");
           }
           else {
             var p = this.naziv + marka + tip + naziv;
-            var s=new Proizvod(marka,naziv,tip);
-              var r;
-              this.rafovi.forEach((raf) => {
-                if (raf.marka == marka) {
-                  r=raf.pronadjiTip(tip);
-                  
-                }
-              });
-              console.log(s);
+            var s = new Proizvod(marka, naziv, tip);
+            var r;
+            this.rafovi.forEach((raf) => {
+              if (raf.marka == marka) {
+                r = raf.pronadjiTip(tip);
+
+              }
+            });
+
             fetch("https://localhost:5001/Magacin/UpisJednogProizvoda/" + tip, {
               method: "POST",
               headers: {
@@ -648,11 +684,9 @@ var sa;
               })
             }).then(p => {
               if (p.ok) {
-                console.log("Succesful");
-                alert("Uspesno dodavanje osvezite stranicu");
-                //  this.Megakontejner.innerHTML=null;
+
                 r.listaNaziva.push(s);
-                  r.brojProizvoda++;
+                r.brojProizvoda++;
                 this.Megakontejner.innerHTML = "";
                 this.crtajMagacin(document.body);
               }
@@ -671,6 +705,7 @@ var sa;
         if (text == "Obrisi proizvod") {
           let pom1;
           this.rafovi.forEach((raf) => {
+            if(marka==raf.marka)
             pom1 = raf.pronadjiTip(tip);
 
           });
@@ -696,10 +731,10 @@ var sa;
               this.rafovi.forEach((raf) => {
                 if (raf.marka == marka) {
                   //r=raf.pronadjiTip(raf);
-                 s = raf.pronadjiProizvode(tip, naziv);
+                  s = raf.pronadjiProizvode(tip, naziv);
+
                 }
               });
-              console.log(s);
 
               fetch("https://localhost:5001/Magacin/IzbrisiProizvod/" + t, {
                 method: "DELETE",
@@ -708,11 +743,9 @@ var sa;
                 }
               }).then(p => {
                 if (p.ok) {
-                  console.log("Succesful");
-                  // alert("Uspesno brisanje osvezite stranicu");
+
                   this.obrisiProizvod(s);
-                 // r.listaNaziva.push(s);
-                 // r.brojProizvoda++;
+
 
                   this.Megakontejner.innerHTML = "";
                   this.crtajMagacin(document.body);
@@ -735,8 +768,7 @@ var sa;
       }
     }
 
-    // 
-    // 
+
   }
   obrisiProizvod(pr) {
     this.rafovi.forEach(element => {
@@ -747,7 +779,8 @@ var sa;
   obrisiProizvodi(pr) {
     this.rafovi.forEach(element => {
       if (element.marka == pr.marka)
-        element.obrisiProizvodi(pr);
+      {
+        element.obrisiProizvodi(pr);}
     });
   }
 }

@@ -61,65 +61,10 @@ dugme1.classList.add("bt");
 dugme1.innerHTML = "Izmani proizvod";
 d4.appendChild(dugme1);
 
-/*dugme1.onclick = (ev) => {
-    const markaP = document.body.querySelector(".marka").value;
-    const tipP = document.body.querySelector(".tip").value;
-    const nazivP = document.body.querySelector(".naziv").value;
-    const nnazivP = document.body.querySelector(".nnaziv").value;
-    console.log(markaP);
-    console.log(tipP);
-    console.log(nazivP);
-    console.log(nnazivP);
+//var k = document.createElement("div");
+//document.body.appendChild(k);
+//var k1 = document.createElement("div");
 
-    if (markaP == "") {
-        alert("Molimo Vas unesite marku prilikom izmene proizvoda");
-        return;
-    }
-    if (tipP == "") {
-        alert("Molimo Vas unesite tip prilikom izmene proizvoda");
-        return;
-    }
-    if (nazivP == "") {
-        alert("Molimo Vas unesite naziv prilikom izmene proizvoda");
-        return;
-    }
-    if (nnazivP == "") {
-        alert("Molimo Vas unesite naziv prilikom izmene proizvoda");
-        return;
-    }
-
-        
-                                var id="magacin" + markaP + tipP + nazivP;
-                                var mag="magacin";
-                                fetch("https://localhost:5001/Magacin/IzmeniProizvod" + id , {
-                                    method: "PUT",
-                                    headers: {
-                                        "Content-Type": "application/json"
-                                    },
-                                    body: JSON.stringify({
-                                        idProizvod: id,
-                                        naziv: nnazivP,
-                                        tip: tipP,
-                                        nazivM: mag,
-                                        marka: markaP
-                                    })
-                                }).then(p => {
-                                    if (p.ok) {
-                                        console.log("Succesful");
-                                        alert("Uspesna izmena osvezite stranicu");
-                                    }//if (p.status == 406)
-                                    else  {
-                                        alert("Input all informations.");
-                                    }
-                                }).catch(p => {
-                                    console.log("Error: " + p);
-                                });
-                                
-                         //   }
-                          
-
-                        
-}*/
 
 let opcija = null;
 let labela = null;
@@ -131,7 +76,7 @@ document.body.appendChild(pLabela);
 fetch("https://localhost:5001/Magacin/PreuzmiMagacin").then(p => {
     p.json().then(data => {
         data.forEach(magacin => {
-            // const m = new Magacin(magacin.naziv, magacin.n, magacin.m, magacin.trenutno);
+            const m = new Magacin(magacin.naziv, magacin.n, magacin.m, magacin.trenutno);
 
             divRb = document.createElement("div");
             opcija = document.createElement("input");
@@ -148,14 +93,12 @@ fetch("https://localhost:5001/Magacin/PreuzmiMagacin").then(p => {
 
         });
         dugme1.onclick = (ev) => {
+            
             const markaP = document.body.querySelector(".marka").value;
             const tipP = document.body.querySelector(".tip").value;
             const nazivP = document.body.querySelector(".naziv").value;
             const nnazivP = document.body.querySelector(".nnaziv").value;
-            console.log(markaP);
-            console.log(tipP);
-            console.log(nazivP);
-            console.log(nnazivP);
+
 
             if (markaP == "") {
                 alert("Molimo Vas unesite marku prilikom izmene proizvoda");
@@ -173,6 +116,8 @@ fetch("https://localhost:5001/Magacin/PreuzmiMagacin").then(p => {
                 alert("Molimo Vas unesite naziv prilikom izmene proizvoda");
                 return;
             }
+
+
             data.forEach(magacin => {
                 magacin.rafovi.forEach((element) => {
 
@@ -182,15 +127,12 @@ fetch("https://localhost:5001/Magacin/PreuzmiMagacin").then(p => {
                             var pi = new Proizvodi(tip.maxProizvoda, tip.brojProizvoda, tip.tip, tip.marka);
                             if (pi.tip == tipP) {
                                 tip.listaNaziva.forEach((naziv) => {
-                                    console.log(magacin.naziv);
-                                    console.log(naziv.naziv);
-                                    console.log(nazivP);
+
                                     if (naziv.naziv == nazivP) {
-                                        console.log(naziv.naziv);
-                                        console.log(nazivP);
-                                        var id=magacin.naziv + markaP + tipP + nazivP;
-                                        console.log(id);
-                                        fetch("https://localhost:5001/Magacin/IzmeniProizvod" , {
+
+                                        var id = magacin.naziv + markaP + tipP + nazivP;
+
+                                        fetch("https://localhost:5001/Magacin/IzmeniProizvod", {
                                             method: "PUT",
                                             headers: {
                                                 "Content-Type": "application/json"
@@ -204,19 +146,21 @@ fetch("https://localhost:5001/Magacin/PreuzmiMagacin").then(p => {
                                             })
                                         }).then(p => {
                                             if (p.ok) {
-                                                console.log("Succesful");
-                                                alert("Uspesna izmena osvezite stranicu");
-                                                
-                                            }//if (p.status == 406)
-                                            else  {
+
+                                                //alert("Uspesna izmena osvezite stranicu");
+                                               // k1.innerHTML = "";
+                                               location.reload();
+
+                                            }
+                                            else {
                                                 alert("Input all informations.");
                                             }
                                         }).catch(p => {
                                             console.log("Error: " + p);
                                         });
-                                        
-                                }
-                                  
+
+                                    }
+
 
                                 });
                             }
@@ -229,37 +173,55 @@ fetch("https://localhost:5001/Magacin/PreuzmiMagacin").then(p => {
         dugme.innerHTML = "Odaberi";
         dugme.classList.add("bt");
         document.body.appendChild(dugme);
+      
+        var i=0;
         dugme.onclick = (ev) => {
+            dugme.style.visibility="hidden";
+             var pp=document.createElement("div");
+                pp.className="p"+i;
+                pp.id=i;
             const mag = document.body.querySelector(`input[name='${"radioNazivi"}']:checked`);
             if (mag == null) {
                 alert("Molimo Vas odaberite magacin");
                 return;
             }
+            
             const magac = mag.value;
             data.forEach(magacin => {
+               
+                document.body.appendChild(pp);
                 if (magacin.naziv == magac) {
                     const m = new Magacin(magacin.naziv, magacin.n, magacin.m, magacin.trenutno);
 
+                   
+                        
+                        magacin.rafovi.forEach((element) => {
 
-                    magacin.rafovi.forEach((element) => {
+                            var r = new Raf(element.marka, element.max, element.trenutnoPr);
+                            
+                           
+                            element.listaProizvoda.forEach((tip) => {
+                                var pi = new Proizvodi(tip.maxProizvoda, tip.brojProizvoda, tip.tip, tip.marka);
+                                
+                              
+                                tip.listaNaziva.forEach((naziv) => {
+                                    var p = new Proizvod(tip.marka, naziv.naziv, naziv.tip);
+                                    pi.dodajProizvod(p);
 
-                        var r = new Raf(element.marka, element.max, element.trenutnoPr);
-
-                        element.listaProizvoda.forEach((tip) => {
-                            var pi = new Proizvodi(tip.maxProizvoda, tip.brojProizvoda, tip.tip, tip.marka);
-                            tip.listaNaziva.forEach((naziv) => {
-                                var p = new Proizvod(tip.marka, naziv.naziv, naziv.tip);
-                                pi.dodajProizvod(p);
-
+                                });
+                                
+                                r.dodajTip(pi);
+                               
+                            
                             });
-                            r.dodajTip(pi);
+                            m.dodajRaf(r);
+                        
                         });
-                        m.dodajRaf(r);
-
-                    });
-                    m.crtajMagacin(document.body);
+                       
+                     m.crtajMagacin(pp);
                 }
-            });
+                i++;
+                });
 
         }
 

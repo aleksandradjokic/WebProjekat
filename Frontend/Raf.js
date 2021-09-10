@@ -1,6 +1,7 @@
 import { Proizvodi } from "./Proizvodi.js"
 export class Raf {
   constructor(marka, max, trenutnoPr) {
+    
     this.max = max;
     this.marka = marka;
     this.trenutnoPr = trenutnoPr;
@@ -76,43 +77,58 @@ export class Raf {
   dodajTip(noviTip) {
     this.tipovi.push(noviTip);
   }
-  pronadjiTip(nadjiTip) {
+  /*pronadjiTip(nadjiTip) {
     let pom = false;
+    console.log(this.tipovi);
     this.tipovi.forEach((tip) => {
-      if (tip.tip == nadjiTip.tip) {
-
-        pom = true;
+      if (tip.tip == nadjiTip) {
+console.log(tip);
+        return  tip;
+        
       }
     });
-    return pom;
-  }
+   // return pom;
+  }*/
   pronadjiProizvode(t, naz) {
+    
+    
     //this.tipovi.forEach(tip => {
     //  if (tip.tip == t) {
         let pro;
-        for(let i=0;i<this.trenutnoPr;i++) {
+       /* for(let i=0;i<this.trenutnoPr;i++) {
             let pro1=this.tipovi[i].pronadjiNaz(naz);
             if(pro1)
             {
 
               pro=pro1;
             }
-      }
-      return pro
+      }*/
+      
+      let p=this.pronadjiTip(t);
+    console.log(p);
+      if(p){
+      pro=  p.pronadjiN(naz);
+      console.log(pro);
+      return pro}
+      else return pro=null;
   
   }
   pronadjiTip(t) {
+ 
+    // n=null;
     let n=this.tipovi.find(tipp=>tipp.tip==t);
+console.log(n);
+       if(n)
+       return n;
+       else return n=null;
 
-      return n;
-  
   }
   upisiProizvod(pr) {
     this.tipovi.forEach(tip=>{
       if(tip.tip==pr.tip)
       {
         tip.upisiProizvod(pr);
-        console.log(pr);
+
        
       }
     });
@@ -123,14 +139,12 @@ export class Raf {
     
   }
   obrisiProizvodi(pr){
-    console.log(pr);
-
-
-this.tipovi.pop(pr);
-    
-    
-    console.log(this.tipovi);
-    this.trenutnoPr--;
-
+ 
+    const index = this.tipovi.indexOf(pr);
+  
+    if (index > -1) {
+        this.tipovi.splice(index, 1);
+        this.trenutnoPr--;
+      }
 }
 }
